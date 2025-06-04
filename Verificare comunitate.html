@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificare Comunitate</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      width: 500px;
+      height: 320px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    h2 {
+      margin: 0 0 10px 0;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      padding: 8px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result, .error {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .result {
+      padding: 10px;
+      background: #e0ffe0;
+      border-left: 5px solid green;
+      border-radius: 5px;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <h2>Verificare Comunitate</h2>
+      <label for="payment">Achitarea lunară:</label>
+      <input type="number" id="payment" placeholder="Ex: 200">
+
+      <label for="period">Perioada în rețea (luni):</label>
+      <input type="number" id="period" placeholder="Ex: 36">
+    </div>
+
+    <div>
+      <button onclick="verifica()">Verifică</button>
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <script>
+    const bonusuri = [
+      "Nu are",
+      "Viteza: +100 Mbps, Grila: PLUS, Mobile TV APP: 0, Apeluri nelimitate, Antivirus, Stele: 20",
+      "Viteza: +200 Mbps, Grila: PLUS, Mobile TV APP: 0, Apeluri nelimitate, Antivirus, Stele: 50",
+      "Viteza: +300 Mbps, Grila: PRO, Mobile TV APP: 1, Apeluri nelimitate, Antivirus, Stele: 100",
+      "Viteza: +400 Mbps, Grila: PRO, Mobile TV APP: 2, Apeluri nelimitate, Antivirus, Stele: 150",
+      "Viteza: +900 Mbps, Grila: PRO, Mobile TV APP: 3, Apeluri nelimitate, Antivirus, Stele: 200"
+    ];
+
+    function verifica() {
+      const payment = parseInt(document.getElementById('payment').value);
+      const period = parseInt(document.getElementById('period').value);
+      const output = document.getElementById('output');
+      let category = "Nu intră în comunitate";
+      let index = 0;
+
+      if (isNaN(payment) || isNaN(period)) {
+        output.innerHTML = `<p class="error">⚠️ Atentie: N-ați introdus toate datele.</p>`;
+        return;
+      }
+
+      const years = Math.floor(period / 12);
+
+      if (payment >= 150 && payment <= 199) {
+        if (years >= 2 && years <= 8) { category = "Bronze"; index = 1; }
+        if (years > 8 && years <= 11) { category = "Silver"; index = 2; }
+        if (years > 11 && years <= 15) { category = "Gold"; index = 3; }
+        if (years > 15) { category = "Platinum"; index = 4; }
+      } else if (payment >= 200 && payment <= 249) {
+        if (years >= 2 && years <= 5) { category = "Bronze"; index = 1; }
+        if (years > 5 && years <= 11) { category = "Gold"; index = 3; }
+        if (years > 11 && years <= 15) { category = "Platinum"; index = 4; }
+        if (years > 15) { category = "VIP"; index = 5; }
+      } else if (payment >= 250 && payment <= 399) {
+        if (years >= 2 && years <= 5) { category = "Silver"; index = 2; }
+        if (years > 5 && years <= 8) { category = "Gold"; index = 3; }
+        if (years > 8 && years <= 11) { category = "Platinum"; index = 4; }
+        if (years > 11) { category = "VIP"; index = 5; }
+      } else if (payment >= 400) {
+        if (years >= 2 && years <= 5) { category = "Gold"; index = 3; }
+        if (years > 5 && years <= 8) { category = "Platinum"; index = 4; }
+        if (years > 8) { category = "VIP"; index = 5; }
+      }
+
+      output.innerHTML = `
+        <div class="result">
+          <strong>Categoria:</strong> ${category}<br>
+          <strong>Bonusuri:</strong> ${bonusuri[index]}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
